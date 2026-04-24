@@ -5,6 +5,7 @@ import { InventorySummaryTemplate } from '../components/templates/InventorySumma
 import { InventoryExceptionTemplate } from '../components/templates/InventoryExceptionTemplate.jsx';
 import { rmDioTrend, rmInventoryValueTrend, rmHealthSplit, rmExceptionDual, materialGapByPlant } from '../data/mockData.js';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
+import { RefreshedOn } from '../components/RefreshedOn.jsx';
 
 const INVENTORY_VIEWS = [
   { id: 'summary', label: 'Raw materials summary' },
@@ -49,6 +50,7 @@ function InventoryAnalytical() {
           <div className="arch-band-title">
             <span>RM — analytical (Gold)</span>
             <p className="arch-band-sub">DIO, trend, health, exceptions, and material×plant heatmap</p>
+            <RefreshedOn />
           </div>
         </div>
         <div className="span-6">
@@ -154,6 +156,12 @@ export function InventoryRm() {
 
   return (
     <>
+      <div className="ref-page-header" style={{ marginBottom: '0.35rem', border: 'none', padding: 0 }}>
+        <h2 className="ref-title" style={{ marginBottom: 0 }}>
+          Raw materials inventory
+        </h2>
+        <RefreshedOn />
+      </div>
       <nav className="ref-subnav" aria-label="Raw materials view">
         {INVENTORY_VIEWS.map((v) => (
           <button

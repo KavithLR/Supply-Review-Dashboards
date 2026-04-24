@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { RefreshedOn } from '../components/RefreshedOn.jsx';
 import { ThemeToggle } from '../components/ThemeToggle.jsx';
 import { DemoModeToggle } from '../components/DemoModeToggle.jsx';
 import { useDashboardData } from '../context/DashboardDataContext.jsx';
@@ -80,6 +81,7 @@ export function DataUploadPage({ theme, onThemeToggle, demo, onDemo }) {
       <div className="span-12">
         <div className="card upload-hub-intro">
           <h3 className="card-title">ITC data upload &amp; templates</h3>
+          <RefreshedOn />
           <p className="card-sub">
             Download <strong>CSV</strong> templates for each area. Upload the <strong>demand</strong> and <strong>supply (plan)</strong> feeds for the Demand supply alignment tab; S&amp;OP <strong>actions</strong> and
             <strong> OTIF reason</strong> files (same <code>action_id</code> or <code>client_code</code> updates existing rows). Other files are <strong>audit-staged</strong> until a backend is connected.

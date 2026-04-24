@@ -18,7 +18,7 @@ export function InventorySummaryTemplate() {
       <div className="ref-page-header ref-page-header--row">
         <div>
           <h2 className="ref-title">Raw materials summary</h2>
-          <p className="ref-sub">Refreshed 2026-02-20 06:00 ICT — RM index path from the ITC demo</p>
+          <p className="ref-sub">RM index path from the ITC demo</p>
         </div>
         <div className="ref-header-actions ref-header-actions--gap">
           <label className="ref-field">

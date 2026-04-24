@@ -1,3 +1,4 @@
+import { RefreshedOn } from '../components/RefreshedOn.jsx';
 import { KpiCard } from '../components/KpiCard.jsx';
 import { RcaParetoChart } from '../components/RcaParetoChart.jsx';
 import { InteractiveIssueTree } from '../components/InteractiveIssueTree.jsx';
@@ -46,6 +47,7 @@ export function OtifDashboard() {
           <div className="arch-band-title">
             <span>Customer &amp; delivery OTIF</span>
             <p className="arch-band-sub">Trend, drivers, and vessel / cut-off pressure</p>
+            <RefreshedOn />
           </div>
         </div>
 

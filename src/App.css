@@ -92,12 +92,16 @@ img.app-brand-mark,
   color: var(--text-primary);
 }
 
-.app-brand span {
+.app-brand span.app-tagline {
   display: block;
   font-size: 0.75rem;
   font-weight: 500;
   color: var(--text-secondary);
   margin-top: 0.15rem;
+}
+.app-header-refresh.itc-refreshed-on,
+.app-brand .app-header-refresh {
+  margin-top: 0.4rem;
 }
 
 .app-tabs {
@@ -201,6 +205,7 @@ img.app-brand-mark,
 
 .card-title {
   margin: 0 0 0.75rem;
+  font-family: var(--font);
   font-size: 1rem;
   font-weight: 600;
   color: var(--text-primary);
@@ -210,6 +215,12 @@ img.app-brand-mark,
   margin: -0.35rem 0 0.75rem;
   font-size: 0.75rem;
   color: var(--text-secondary);
+}
+.card .itc-refreshed-on {
+  margin: 0.1rem 0 0.35rem;
+}
+.card .itc-refreshed-on + .card-sub {
+  margin-top: 0;
 }
 
 .drawer-backdrop {
@@ -277,6 +288,27 @@ img.app-brand-mark,
   font-size: 0.75rem;
   color: var(--color-royal);
   margin-top: 0.35rem;
+}
+[data-theme='dark'] .filter-breadcrumb {
+  color: #a8c4ff;
+}
+
+/* “Refreshed on …” — one line under main titles; same type as the rest of the app */
+.itc-refreshed-on {
+  font-family: var(--font);
+  font-size: 0.78rem;
+  font-style: normal;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin: 0.25rem 0 0;
+  letter-spacing: 0.01em;
+}
+.itc-refreshed-on--tab {
+  margin: 0 0 0.5rem;
+}
+[data-theme='dark'] .arch-band-title .itc-refreshed-on,
+[data-theme='dark'] .ref-page-header .itc-refreshed-on {
+  color: #b8bcc4;
 }
 
 .sr-only {
@@ -381,9 +413,25 @@ img.app-brand-mark,
   padding: 0.45rem 0.65rem;
   border-radius: var(--radius-sm);
   border: var(--border);
-  background: var(--card-bg);
+  background-color: var(--card-bg);
   color: var(--text-primary);
   min-width: 160px;
+  color-scheme: light;
+}
+/* Native dropdown list + options (esp. Windows / Chrome) */
+.gfb-select option {
+  background-color: var(--card-bg);
+  color: var(--text-primary);
+}
+[data-theme='dark'] .gfb-select {
+  background-color: #2a2d35;
+  color: #e8eaed;
+  border-color: #3d4249;
+  color-scheme: dark;
+}
+[data-theme='dark'] .gfb-select option {
+  background-color: #2a2d35;
+  color: #e8eaed;
 }
 
 .gfb-actions {
@@ -1572,8 +1620,16 @@ img.app-brand-mark,
   border-bottom: 1px solid var(--color-gray-light);
   padding-bottom: 0.5rem;
 }
+[data-theme='dark'] .ref-page-header--row {
+  border-bottom-color: #2e3238;
+}
+.arch-band-title .itc-refreshed-on {
+  margin: 0.2rem 0 0;
+  text-transform: none;
+  letter-spacing: 0.01em;
+}
 .ref-title {
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-family: var(--font);
   font-size: 1.25rem;
   font-weight: 700;
   color: var(--text-primary);
@@ -1620,8 +1676,53 @@ img.app-brand-mark,
   padding: 0.35rem 0.5rem;
   border-radius: var(--radius-sm);
   border: var(--border);
-  background: var(--card-bg);
+  background-color: var(--card-bg);
+  color: var(--text-primary);
   min-width: 5.5rem;
+  color-scheme: light;
+}
+.ref-select option {
+  background-color: var(--card-bg);
+  color: var(--text-primary);
+}
+[data-theme='dark'] .ref-select {
+  background-color: #2a2d35;
+  color: #e8eaed;
+  border-color: #3d4249;
+  color-scheme: dark;
+}
+[data-theme='dark'] .ref-select option {
+  background-color: #2a2d35;
+  color: #e8eaed;
+}
+
+/* Unclassed `select` (e.g. form modals) inside the app shell */
+.app-shell .card select:not(.gfb-select):not(.ref-select),
+.app-main select:not(.gfb-select):not(.ref-select) {
+  color: var(--text-primary);
+  background-color: var(--card-bg);
+  border: var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.5rem;
+  font: inherit;
+  color-scheme: light;
+}
+.app-shell .card select option,
+.app-main select option {
+  background-color: var(--card-bg);
+  color: var(--text-primary);
+}
+[data-theme='dark'] .app-shell .card select:not(.gfb-select):not(.ref-select),
+[data-theme='dark'] .app-main select:not(.gfb-select):not(.ref-select) {
+  background-color: #2a2d35;
+  color: #e8eaed;
+  border-color: #3d4249;
+  color-scheme: dark;
+}
+[data-theme='dark'] .app-shell .card select option,
+[data-theme='dark'] .app-main select option {
+  background-color: #2a2d35;
+  color: #e8eaed;
 }
 .ref-two-col {
   display: grid;
@@ -1810,7 +1911,7 @@ img.app-brand-mark,
   padding: 0.4rem 0.75rem;
   border-radius: 8px 8px 0 0;
   cursor: pointer;
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-family: var(--font);
 }
 .ref-subnav-btn:hover {
   color: var(--text-primary);

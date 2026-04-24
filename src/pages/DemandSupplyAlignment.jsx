@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
   Cell,
 } from 'recharts';
+import { RefreshedOn } from '../components/RefreshedOn.jsx';
 import { useDashboardData } from '../context/DashboardDataContext.jsx';
 import {
   joinDemandSupply,
@@ -18,7 +19,6 @@ import {
   kpiFromJoined,
   topByGap,
 } from '../data/demandSupplyData.js';
-import { ITC_DEMO_GITHUB } from '../config/itcDemoLinks.js';
 
 const tip = { background: 'var(--tooltip-bg)', border: '1px solid var(--tooltip-border)', borderRadius: 8 };
 
@@ -65,12 +65,7 @@ export function DemandSupplyAlignment() {
       <div className="ref-page-header">
         <div>
           <h2 className="ref-title">Demand Supply Alignment</h2>
-          <p className="card-sub">
-            Demand and production plan are joined on <strong>SKU + plant + time</strong>. <code>category</code> uses the same demo link as in uploads:{' '}
-            <a href={ITC_DEMO_GITHUB} target="_blank" rel="noreferrer">
-              {ITC_DEMO_GITHUB}
-            </a>
-          </p>
+          <RefreshedOn />
         </div>
         <div className="ref-header-actions">
           <label className="ref-field">

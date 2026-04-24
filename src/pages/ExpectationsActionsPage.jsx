@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { RefreshedOn } from '../components/RefreshedOn.jsx';
 import { expectationsSeed } from '../data/referenceTemplateData.js';
 
 const STORAGE = 'itc-expectations-v1';
@@ -62,6 +63,7 @@ export function ExpectationsActionsPage() {
       <div className="ref-page-header" style={{ alignItems: 'flex-start' }}>
         <div>
           <h2 className="ref-title">Expectations &amp; actions</h2>
+          <RefreshedOn />
           <p className="ref-sub">Targets vs current (mock KPIs) — add rows; stored in this browser (localStorage).</p>
         </div>
         <button type="button" className="gfb-btn secondary" onClick={resetToSeed}>

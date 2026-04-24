@@ -27,6 +27,7 @@ import {
   topUnderproductions,
 } from '../../data/referenceTemplateData.js';
 import { refAdherenceCellClass } from './productionAdherenceRag.js';
+import { RefreshedOn } from '../RefreshedOn.jsx';
 
 const fmtK = (v) => (Math.abs(v) >= 1000 ? `${(v / 1000).toFixed(0)}K` : `${Math.round(v)}`);
 
@@ -55,7 +56,8 @@ export function ProductionAttainmentTemplate() {
       <div className="ref-page-header">
         <div>
           <h2 className="ref-title">Production adherence and attainment</h2>
-          <p className="ref-sub">Refreshed 2026-02-20 06:00 ICT — same demo path as the ITC supply review model.</p>
+          <RefreshedOn />
+          <p className="ref-sub">Same demo path as the ITC supply review model.</p>
         </div>
         <div className="ref-header-actions">
           <label className="ref-field">

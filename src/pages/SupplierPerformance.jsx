@@ -1,3 +1,4 @@
+import { RefreshedOn } from '../components/RefreshedOn.jsx';
 import { KpiCard } from '../components/KpiCard.jsx';
 import { supplierOtif, supplierOtifTrend, supplierLeadTime, openPoStacked } from '../data/mockData.js';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
@@ -40,6 +41,7 @@ export function SupplierPerformance() {
           <div className="arch-band-title">
             <span>Supplier performance</span>
             <p className="arch-band-sub">OTIF, lead time, and open purchase-order risk</p>
+            <RefreshedOn />
           </div>
         </div>
 

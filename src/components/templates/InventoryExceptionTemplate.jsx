@@ -19,10 +19,8 @@ export function InventoryExceptionTemplate() {
       <div className="ref-page-header ref-page-header--row">
         <div>
           <h2 className="ref-title">Prioritized raw materials exceptions (above &amp; under target)</h2>
+          <p className="ref-sub" style={{ margin: 0 }}>Same priority logic as the RM exception list (template)</p>
         </div>
-        <p className="ref-sub" style={{ margin: 0 }}>
-          As of 2026-02-20 ICT — same priority logic as the RM exception list (template)
-        </p>
       </div>
       <div className="ref-filter-bar" style={{ flexWrap: 'wrap' }}>
         <label className="ref-field ref-field--grow">

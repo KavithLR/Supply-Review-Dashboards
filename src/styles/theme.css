@@ -1,3 +1,11 @@
+/* Tells the browser to render native form controls (select, scrollbars) for the active theme. */
+html {
+  color-scheme: light;
+}
+html[data-theme='dark'] {
+  color-scheme: dark;
+}
+
 :root {
   --color-royal: #2a62b9;
   --color-royal-dark: #1d4a8a;
@@ -32,7 +40,8 @@
   --shadow-hover: 0 6px 20px rgba(42, 98, 185, 0.12);
   --radius-card: 18px;
   --radius-sm: 10px;
-  --font: 'DM Sans', system-ui, sans-serif;
+  /* ITC supply review UI: one sans stack end-to-end (headings, body, controls) */
+  --font: 'DM Sans', 'Segoe UI', system-ui, sans-serif;
   --chart-grid: #e8e8e8;
   --chart-axis: #6a6a6a;
   --chart-planned-bar: var(--color-sky-light);
@@ -83,4 +92,13 @@ body {
   background: var(--page-bg);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font);
 }

@@ -9,6 +9,8 @@ import { ExpectationsActionsPage } from './pages/ExpectationsActionsPage.jsx';
 import { DataUploadPage } from './pages/DataUploadPage.jsx';
 import { DemandSupplyAlignment } from './pages/DemandSupplyAlignment.jsx';
 import { ItcBrandMark } from './components/ItcBrandMark.jsx';
+import { RefreshedOn } from './components/RefreshedOn.jsx';
+import { ITC_DASHBOARD_REFRESH } from './config/itcMeta.js';
 
 const TABS = [
   { id: 'demandSupply', label: 'Demand Supply Alignment' },
@@ -46,7 +48,7 @@ export default function App() {
     return `Active: ${parts.join(' · ')}`;
   }, [period, plant, packaging]);
 
-  const lastRefresh = '2026-02-20 06:00 ICT';
+  const lastRefresh = ITC_DASHBOARD_REFRESH;
 
   const content = (() => {
     switch (tab) {
@@ -78,6 +80,7 @@ export default function App() {
             <div>
               <h1>ITC Supply Review Dashboard</h1>
               <span className="app-tagline">Production, raw materials inventory, suppliers, and OTIF — supply review</span>
+              <RefreshedOn className="app-header-refresh" />
             </div>
           </div>
           {demo ? (
