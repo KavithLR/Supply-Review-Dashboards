@@ -8,7 +8,7 @@ After [GitHub Actions](.github/workflows/deploy-github-pages.yml) has run at lea
 
 **https://kavithlr.github.io/Supply-Review-Dashboards/**
 
-(Asset `base` is `/Supply-Review-Dashboards/`, set automatically in CI to match the repository name.)
+The site is published under a **subpath** (`/Supply-Review-Dashboards/`). Vite `base` comes from [`.env.production`](.env.production) and the GitHub Action env `VITE_BASE_PATH`. If the live site is **blank / white** but local dev works, the usual cause is a **mismatched** base: built assets 404. Use **Source: GitHub Actions** for Pages (not “Deploy from a branch” to `/` without a build), push again, and wait for the green workflow run.
 
 ## Local development
 

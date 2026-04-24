@@ -1,6 +1,6 @@
 # Build and deploy the Vite app to GitHub Pages (https://<user>.github.io/<repo-name>/).
 # After the first successful run: Repo → Settings → Pages → Source = "GitHub Actions" (not branch).
-# Local test of production base: VITE_BASE_PATH=/<repo-name>/ npm run build && npm run preview
+# Local test: npm run build (uses .env.production, base ./) && npm run preview
 
 name: Deploy GitHub Pages
 
@@ -28,10 +28,21 @@ jobs:
           node-version: '20'
       - run: npm install
       - name: Build
+        # Redundant with vite.config: ensures CI never ships "/" base if .env.production is missing.
         env:
-          # Must match your repository name (GitHub → repo title in the URL)
-          VITE_BASE_PATH: /${{ github.event.repository.name }}/
+          VITE_BASE_PATH: './'
         run: npm run build
+      - name: Check build output
+        run: |
+          set -e
+          test -f dist/index.html
+          test -d dist/assets
+          if grep -qE 'src="/assets/|href="/assets/' dist/index.html; then
+            echo "ERROR: index uses /assets/ at site root; GitHub project Pages needs ./assets/ (see vite base + VITE_BASE_PATH)."
+            head -n 25 dist/index.html
+            exit 1
+          fi
+          ls -la dist/ | head -20
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
