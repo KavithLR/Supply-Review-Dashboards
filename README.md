@@ -35,6 +35,19 @@ npm run build && npm run preview
 
 (PowerShell: `$env:VITE_BASE_PATH="/Supply-Review-Dashboards/"; npm run build; npm run preview`)
 
+## Push this project to GitHub (first time)
+
+1. Create or use the repo: **https://github.com/KavithLR/Supply-Review-Dashboards** (empty is fine).
+2. Add it as a remote and push `main` (keeps your other remotes, e.g. `origin`, unchanged):
+   ```bash
+   git remote add kavith-supply https://github.com/KavithLR/Supply-Review-Dashboards.git
+   git push -u kavith-supply main
+   ```
+3. On GitHub: **Settings → Pages → Build and deployment → Source: GitHub Actions** (not “Deploy from a branch” until you use the workflow).
+4. Open the **Actions** tab and confirm **Deploy GitHub Pages** finished green.
+
+If `git push` shows `index-pack` / `did not receive expected object`, try again, use [GitHub Desktop](https://desktop.github.com), or `gh auth login` and push from your machine; this is often network or a transient GitHub quirk.
+
 ## Repository
 
 **https://github.com/KavithLR/Supply-Review-Dashboards**
