@@ -11,4 +11,13 @@ function appBase() {
 export default defineConfig({
   plugins: [react()],
   base: appBase(),
+  /** Dedicated port for this app so it does not clash with other Vite projects on 5173 */
+  server: {
+    port: 5300,
+    strictPort: false,
+  },
+  preview: {
+    port: 5300,
+    strictPort: false,
+  },
 });

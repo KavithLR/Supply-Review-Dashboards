@@ -1,26 +1,13 @@
 import { KpiCard } from '../components/KpiCard.jsx';
 import { RcaParetoChart } from '../components/RcaParetoChart.jsx';
-import { otifTrend, rcaPareto, vesselMisses, logisticsCost } from '../data/mockData.js';
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  Area,
-  AreaChart,
-} from 'recharts';
+import { InteractiveIssueTree } from '../components/InteractiveIssueTree.jsx';
+import { useDashboardData } from '../context/DashboardDataContext.jsx';
+import { otifTrend, rcaPareto, vesselMisses, heatmapRca } from '../data/mockData.js';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 
-const costStack = logisticsCost.map((row) => ({
-  m: row.m,
-  total: row.freight + row.wh + row.premium + row.other,
-}));
+export function OtifDashboard() {
+  const { rcaPaths } = useDashboardData();
 
-export function ServiceLogistics() {
   return (
     <>
       <div className="kpi-ribbon kpi-ribbon--compact">
@@ -43,12 +30,29 @@ export function ServiceLogistics() {
           rag="amber"
           spark={[4.2, 4.5, 5, 5.5, 5.8, 6.1, 6.4]}
         />
+        <KpiCard
+          label="On-time % (schedule)"
+          value="93.8"
+          unit="%"
+          target="95%"
+          variance="-1.2 pts"
+          rag="amber"
+          spark={[95.5, 95.2, 95, 94.5, 94, 94, 93.8]}
+        />
       </div>
+
       <div className="grid-12" style={{ marginTop: '1rem' }}>
+        <div className="span-12">
+          <div className="arch-band-title">
+            <span>Customer &amp; delivery OTIF</span>
+            <p className="arch-band-sub">Trend, drivers, and vessel / cut-off pressure</p>
+          </div>
+        </div>
+
         <div className="span-5">
           <div className="card">
-            <h3 className="card-title">OTIF trend</h3>
-            <p className="card-sub">Monthly % — numerator/denominator in tooltip (live)</p>
+            <h3 className="card-title">Customer OTIF — trend</h3>
+            <p className="card-sub">Monthly % (mock)</p>
             <div className="chart-wrap">
               <ResponsiveContainer width="100%" height={280}>
                 <LineChart data={otifTrend} margin={{ top: 8, right: 12, left: 0, bottom: 8 }}>
@@ -63,12 +67,12 @@ export function ServiceLogistics() {
           </div>
         </div>
         <div className="span-7">
-          <RcaParetoChart title="OTIF RCA Pareto" subtitle="Miss count vs cumulative % — executive families" data={rcaPareto} />
+          <RcaParetoChart title="OTIF RCA — Pareto" subtitle="Miss count vs cumulative % — family drivers" data={rcaPareto} />
         </div>
         <div className="span-6">
           <div className="card">
             <h3 className="card-title">% shipments missing vessel / cut-off</h3>
-            <p className="card-sub">Leading indicator for delay-related OTIF</p>
+            <p className="card-sub">Leading signal for delivery OTIF (mock)</p>
             <div className="chart-wrap">
               <ResponsiveContainer width="100%" height={260}>
                 <BarChart data={vesselMisses} margin={{ top: 8, right: 8, left: 0, bottom: 8 }}>
@@ -84,24 +88,47 @@ export function ServiceLogistics() {
         </div>
         <div className="span-6">
           <div className="card">
-            <h3 className="card-title">Logistics cost % sales — composition</h3>
-            <p className="card-sub">Freight, WH, premium, other</p>
-            <div className="chart-wrap">
-              <ResponsiveContainer width="100%" height={260}>
-                <AreaChart data={logisticsCost} margin={{ top: 8, right: 12, left: 0, bottom: 8 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" />
-                  <XAxis dataKey="m" tick={{ fill: 'var(--chart-axis)', fontSize: 11 }} />
-                  <YAxis tick={{ fill: 'var(--chart-axis)', fontSize: 11 }} />
-                  <Tooltip contentStyle={{ background: 'var(--tooltip-bg)', border: '1px solid var(--tooltip-border)' }} />
-                  <Area type="monotone" dataKey="freight" stackId="1" stroke="var(--color-royal)" fill="var(--color-royal-light)" name="Freight" />
-                  <Area type="monotone" dataKey="wh" stackId="1" stroke="var(--color-teal)" fill="var(--color-teal-light)" name="WH" />
-                  <Area type="monotone" dataKey="premium" stackId="1" stroke="var(--color-orange)" fill="var(--color-orange-light)" name="Premium" />
-                  <Area type="monotone" dataKey="other" stackId="1" stroke="var(--color-sky)" fill="var(--color-sky-light)" name="Other" />
-                </AreaChart>
-              </ResponsiveContainer>
+            <h3 className="card-title">OTIF RCA contribution by plant</h3>
+            <p className="card-sub">% of misses by driver family (mock)</p>
+            <div className="table-scroll">
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>Plant</th>
+                    <th>Vessel</th>
+                    <th>Customer</th>
+                    <th>Material</th>
+                    <th>Prod./QA</th>
+                    <th>WH</th>
+                    <th>External</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {heatmapRca.map((row) => (
+                    <tr key={row.plant}>
+                      <th scope="row">{row.plant}</th>
+                      <td>{row.vessel}%</td>
+                      <td>{row.customer}%</td>
+                      <td>{row.material}%</td>
+                      <td>{row.production}%</td>
+                      <td>{row.wh}%</td>
+                      <td>{row.external}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-            <p className="card-sub">Total trend: {costStack.at(-1)?.total.toFixed(2)}% (Feb)</p>
           </div>
+        </div>
+
+        <div className="span-12">
+          <div className="arch-band-title" style={{ marginTop: '0.5rem' }}>
+            <span>OTIF — issue tree</span>
+            <p className="arch-band-sub">RCA path drill (mock data)</p>
+          </div>
+        </div>
+        <div className="span-12">
+          <InteractiveIssueTree paths={rcaPaths} />
         </div>
       </div>
     </>

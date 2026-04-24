@@ -1,5 +1,6 @@
-# Build and deploy the Vite app to GitHub Pages.
-# After the first successful run: Repo → Settings → Pages → set Source to "GitHub Actions".
+# Build and deploy the Vite app to GitHub Pages (https://<user>.github.io/<repo-name>/).
+# After the first successful run: Repo → Settings → Pages → Source = "GitHub Actions" (not branch).
+# Local test of production base: VITE_BASE_PATH=/<repo-name>/ npm run build && npm run preview
 
 name: Deploy GitHub Pages
 

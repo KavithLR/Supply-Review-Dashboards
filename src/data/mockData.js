@@ -100,6 +100,62 @@ export const momTrendStrip = [
   { month: 'Feb', demand: 102, production: 96, service: 91.3, inventory: 98 },
 ];
 
+/** Production — plan vs actual (ITC arch: bar + line, time × qty + %) */
+export const planVsActual = [
+  { t: 'Oct W1', plan: 9_800, actual: 9_550, adh: 97.4 },
+  { t: 'Oct W2', plan: 9_900, actual: 9_700, adh: 98.0 },
+  { t: 'Nov W1', plan: 10_000, actual: 9_820, adh: 98.2 },
+  { t: 'Nov W2', plan: 10_000, actual: 9_720, adh: 97.2 },
+  { t: 'Dec W1', plan: 10_200, actual: 9_880, adh: 96.9 },
+  { t: 'Jan W1', plan: 10_300, actual: 9_900, adh: 96.1 },
+  { t: 'Feb W1', plan: 10_200, actual: 9_680, adh: 95.0 },
+];
+
+/** Adherence bucket — 100% stacked (on-plan vs over/under) */
+export const adherence100Stacked = [
+  { m: 'Oct', onPlan: 38, overPlan: 10, underPlan: 6, notRun: 46 },
+  { m: 'Nov', onPlan: 40, overPlan: 8, underPlan: 5, notRun: 47 },
+  { m: 'Dec', onPlan: 42, overPlan: 9, underPlan: 5, notRun: 44 },
+  { m: 'Jan', onPlan: 41, overPlan: 11, underPlan: 6, notRun: 42 },
+  { m: 'Feb', onPlan: 40, overPlan: 10, underPlan: 4, notRun: 46 },
+];
+
+/** One canonical demo SKU set — use everywhere a chart or template references product codes */
+export const DEMO_SKUS = ['FG-Can-A1', 'FG-Cup-22', 'FG-Pch-M9', 'FG-Sct-P4', 'FG-Alt-01', 'FG-Twn-88'];
+
+/**
+ * Underproduction by SKU (gap = planned − actual, metric tons)
+ * Same `sku` values as demand–supply alignment and upload templates
+ */
+const _gapDemo = [420, 310, 280, 120, 95, 75];
+const _plant = ['SS', 'SS', 'SK', 'SK', 'SS', 'SK'];
+export const underproductionGaps = DEMO_SKUS.map((sku, i) => ({
+  sku,
+  gap: _gapDemo[i] ?? 80,
+  plant: _plant[i] ?? 'SS',
+}));
+
+/**
+ * Bottleneck scatter — line load / effective cap (Y) vs line (X).
+ * Tied to same demo story: Can at SS >100% utilization.
+ */
+export const bottleneckLoadVsCap = [
+  { line: 'Alutray', load: 70, cap: 80, u: 87 },
+  { line: 'Can', load: 105, cap: 100, u: 105 },
+  { line: 'Cup', load: 82, cap: 96, u: 85 },
+  { line: 'Pouch', load: 88, cap: 99, u: 91 },
+  { line: 'Sachet', load: 74, cap: 80, u: 78 },
+];
+
+export const bottleneckLoadVsCapSk = [
+  { line: 'Can', load: 80, cap: 91, u: 88 },
+  { line: 'Cup', load: 89, cap: 97, u: 92 },
+  { line: 'Pouch', load: 76, cap: 96, u: 79 },
+  { line: 'Sachet', load: 90, cap: 96, u: 94 },
+  { line: 'Spout', load: 79, cap: 98, u: 81 },
+  { line: 'Twin p.', load: 70, cap: 92, u: 76 },
+];
+
 export const exceptionsSummary = [
   { title: 'OTIF below target — 3 plants', severity: 'red', impact: 'High' },
   { title: 'Can line >100% utilization (SS)', severity: 'amber', impact: 'Med' },
@@ -189,6 +245,72 @@ export const rmDioTrend = [
   { m: 'Dec', dio: 43 },
   { m: 'Jan', dio: 42.5 },
   { m: 'Feb', dio: 42 },
+];
+
+/** RM inventory value trend (core stock movement view) */
+export const rmInventoryValueTrend = [
+  { m: 'Oct', value: 118, target: 115 },
+  { m: 'Nov', value: 119, target: 116 },
+  { m: 'Dec', value: 120, target: 116 },
+  { m: 'Jan', value: 122, target: 117 },
+  { m: 'Feb', value: 121, target: 118 },
+];
+
+/** Health split — % of portfolio (healthy, buffer, at-risk, excess) */
+export const rmHealthSplit = [
+  { m: 'Oct', healthy: 64, buffer: 18, atRisk: 12, excess: 6 },
+  { m: 'Nov', healthy: 65, buffer: 17, atRisk: 11, excess: 7 },
+  { m: 'Dec', healthy: 64, buffer: 18, atRisk: 12, excess: 6 },
+  { m: 'Jan', healthy: 63, buffer: 17, atRisk: 13, excess: 7 },
+  { m: 'Feb', healthy: 62, buffer: 18, atRisk: 13, excess: 7 },
+];
+
+/** Exception dual — shortage vs excess qty by material (relative units) */
+export const rmExceptionDual = [
+  { material: 'Lam-Can', short: 42, ex: 0 },
+  { material: 'Film-PP', short: 28, ex: 0 },
+  { material: 'Ink-UV', short: 0, ex: 3 },
+  { material: 'Crown-Std', short: 15, ex: 0 },
+  { material: 'Carton-AB', short: 0, ex: 12 },
+];
+
+export const materialGapByPlant = {
+  rows: ['Lam-Can', 'Film-PP', 'Ink-UV', 'Crown-Std', 'Lid-PS'],
+  cols: ['SS', 'SK'],
+  /** + = excess, − = shortage (days cover gap vs target) */
+  values: [
+    [-1.2, 0.4],
+    [0.8, -0.5],
+    [0.0, 0.2],
+    [-0.3, 0.1],
+    [0.5, -0.2],
+  ],
+};
+
+/** Supplier OTIF trend (same 88.7% terminal as KPI) */
+export const supplierOtifTrend = [
+  { m: 'Oct', vendorA: 91, vendorB: 90, all: 90.0 },
+  { m: 'Nov', vendorA: 90, vendorB: 89, all: 89.2 },
+  { m: 'Dec', vendorA: 89, vendorB: 88, all: 88.5 },
+  { m: 'Jan', vendorA: 89, vendorB: 87, all: 88.0 },
+  { m: 'Feb', vendorA: 88, vendorB: 87, all: 88.7 },
+];
+
+export const supplierLeadTime = [
+  { name: 'North', days: 18, signal: 2.4 },
+  { name: 'East', days: 16, signal: 2.0 },
+  { name: 'West', days: 20, signal: 2.8 },
+  { name: 'South', days: 17, signal: 1.2 },
+  { name: 'Imp-Asia', days: 22, signal: 1.0 },
+];
+
+/** Open purchase orders at risk (stack) */
+export const openPoStacked = [
+  { m: 'Oct', onTrack: 32, atRisk: 5, pastDue: 1 },
+  { m: 'Nov', onTrack: 34, atRisk: 6, pastDue: 2 },
+  { m: 'Dec', onTrack: 30, atRisk: 7, pastDue: 1 },
+  { m: 'Jan', onTrack: 31, atRisk: 8, pastDue: 2 },
+  { m: 'Feb', onTrack: 30, atRisk: 6, pastDue: 1 },
 ];
 
 export const slobAging = [

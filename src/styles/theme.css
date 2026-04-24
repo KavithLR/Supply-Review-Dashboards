@@ -35,8 +35,17 @@
   --font: 'DM Sans', system-ui, sans-serif;
   --chart-grid: #e8e8e8;
   --chart-axis: #6a6a6a;
+  --chart-planned-bar: var(--color-sky-light);
+  --chart-produced-bar: var(--color-teal);
+  --chart-line-adherence: var(--color-royal);
+  --chart-line-attainment: var(--color-charcoal);
   --tooltip-bg: #ffffff;
   --tooltip-border: var(--color-gray-light);
+  --ref-heat-1: #ffcdd2;
+  --ref-heat-2: #ffe0b2;
+  --ref-heat-3: #c8e6c9;
+  --ref-heat-4: #1b5e20;
+  --ref-heat-t4: #ffffff;
 }
 
 [data-theme='dark'] {
@@ -49,8 +58,17 @@
   --shadow-hover: 0 8px 28px rgba(42, 98, 185, 0.25);
   --chart-grid: #2e3238;
   --chart-axis: #b0b0b0;
+  --chart-planned-bar: #2d3a48;
+  --chart-produced-bar: #3d5c52;
+  --chart-line-adherence: #7eb0ff;
+  --chart-line-attainment: #e2e2e2;
   --tooltip-bg: #262626;
   --tooltip-border: #3d4249;
+  --ref-heat-1: #5a3036;
+  --ref-heat-2: #5a4a2d;
+  --ref-heat-3: #2a4a30;
+  --ref-heat-4: #66bb6a;
+  --ref-heat-t4: #0a1a0a;
 }
 
 *,

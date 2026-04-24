@@ -1,6 +1,25 @@
 /**
- * CSV templates for every metric area (all tabs). Download only — upload handled in UI.
+ * ITC Supply Review — CSV template definitions. Downloaded files are prefilled with the same
+ * dummy rows as `itcTemplateRows.js` (aligned to mock / UI tables; replace for production).
  */
+import {
+  buildTemplateCsvString,
+  rowsPlanVsActualWeek,
+  rowsAdherenceByPackaging,
+  rowsCapacityUtilization,
+  rowsRmValueIndex,
+  rowsRmHealthPct,
+  rowsExcessDeficit,
+  rowsSupplierOtif,
+  rowsOpenPo,
+  rowsCustomerOtif,
+  rowsOtifRcaPlant,
+  rowsExpectations,
+  rowsSopActions,
+  rowsIssueTreeReasons,
+  rowsDsaDemand,
+  rowsDsaSupplyPlan,
+} from './itcTemplateRows.js';
 
 function download(filename, content) {
   const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
@@ -12,25 +31,28 @@ function download(filename, content) {
   URL.revokeObjectURL(url);
 }
 
-const BOM = '\uFEFF';
+/**
+ * @typedef {{ id: string, name: string, filename: string, headers: string[], getRows: () => string[][] }} CsvItem
+ */
 
-export const METRIC_TEMPLATE_GROUPS = [
+/** @type {{ tab: string, items: CsvItem[] }[]} */
+export const ITC_METRIC_TEMPLATE_GROUPS = [
   {
-    tab: 'Executive & Demand',
+    tab: 'Demand Supply Alignment',
     items: [
       {
-        id: 'demand_fca',
-        name: 'Forecast accuracy & bias',
-        filename: 'template_demand_fca_bias.csv',
-        headers: ['customer_id', 'segment', 'month', 'forecast_cycle', 'forecast_qty', 'actual_qty', 'fca_pct', 'bias_pct', 'budget_qty'],
-        example: ['CUST-001', 'Mainstream', '2026-02', 'FC5', '12000', '11800', '98.3', '1.7', '11500'],
+        id: 'dsa_demand',
+        name: 'Demand (SKU, plant, time) — with priority & category link',
+        filename: 'itc_template_dsa_demand.csv',
+        headers: ['sku', 'plant', 'time', 'demand_qty', 'demand_priority', 'category'],
+        getRows: rowsDsaDemand,
       },
       {
-        id: 'demand_bridge',
-        name: 'Sales vs budget / outlook bridge',
-        filename: 'template_demand_sales_budget_bridge.csv',
-        headers: ['month', 'budget', 'base_demand', 'confirmed_uplift', 'pipeline', 'risk_downside', 'net_outlook_pct'],
-        example: ['2026-02', '100', '3', '2.5', '1.2', '-4.3', '102.4'],
+        id: 'dsa_supply',
+        name: 'Supply / production plan (Planned Qty) — same keys for join',
+        filename: 'itc_template_dsa_supply_plan.csv',
+        headers: ['sku', 'plant', 'time', 'planned_qty'],
+        getRows: rowsDsaSupplyPlan,
       },
     ],
   },
@@ -38,100 +60,140 @@ export const METRIC_TEMPLATE_GROUPS = [
     tab: 'Production & capacity',
     items: [
       {
-        id: 'production_adherence',
-        name: 'Plan adherence by plant',
-        filename: 'template_production_plan_adherence.csv',
-        headers: ['plant_code', 'month', 'planned_output', 'actual_output', 'adherence_pct', 'bucket'],
-        example: ['SS', '2026-02', '10000', '9650', '96.5', 'within_10pct'],
+        id: 'prod_plan_actual_week',
+        name: 'Plan vs actual (weekly) — adherence / attainment chart',
+        filename: 'itc_template_production_plan_vs_actual_week.csv',
+        headers: ['week_id', 'plant_code', 'planned_qty', 'produced_qty', 'adherence_pct', 'attainment_pct'],
+        getRows: rowsPlanVsActualWeek,
+      },
+      {
+        id: 'prod_pack_heatmap',
+        name: 'Adherence by packaging (plant × line × week)',
+        filename: 'itc_template_production_adherence_by_packaging.csv',
+        headers: ['week_id', 'plant_code', 'packaging', 'adherence_pct'],
+        getRows: rowsAdherenceByPackaging,
       },
       {
         id: 'capacity_utilization',
-        name: 'Capacity utilization (plant × packaging)',
-        filename: 'template_capacity_utilization.csv',
+        name: 'Capacity utilization (plant × packaging × month)',
+        filename: 'itc_template_capacity_utilization.csv',
         headers: ['plant_code', 'packaging_type', 'month', 'effective_capacity', 'actual_volume', 'utilization_pct'],
-        example: ['SS', 'Can', '2026-02', '5000', '5250', '105'],
+        getRows: rowsCapacityUtilization,
       },
     ],
   },
   {
-    tab: 'Service & logistics',
+    tab: 'Raw materials inventory',
     items: [
       {
-        id: 'logistics_otif',
-        name: 'Customer OTIF & shipment lines',
-        filename: 'template_logistics_otif_shipments.csv',
-        headers: ['order_id', 'plant_code', 'customer_id', 'month', 'otif_met', 'delay_days', 'short_qty', 'rca_family', 'client_reason_code'],
-        example: ['SO-10001', 'SS', 'CUST-001', '2026-02', 'N', '3', '0', 'vessel_export', 'VSL-14'],
+        id: 'rm_value_trend',
+        name: 'RM inventory value index (monthly)',
+        filename: 'itc_template_rm_inventory_value_index.csv',
+        headers: ['month', 'plant_code', 'value_index', 'policy_target_index'],
+        getRows: rowsRmValueIndex,
       },
       {
-        id: 'logistics_vessel',
-        name: 'Vessel / cut-off misses',
-        filename: 'template_logistics_vessel_cutoff.csv',
-        headers: ['shipment_id', 'plant_code', 'lane', 'month', 'missed_cutoff_yn', 'customer_id'],
-        example: ['SH-9001', 'SK', 'EU-West', '2026-02', 'Y', 'CUST-002'],
+        id: 'rm_health',
+        name: 'Inventory health % (OOS / healthy / above std)',
+        filename: 'itc_template_rm_health_pct.csv',
+        headers: ['month', 'oos_pct', 'healthy_pct', 'above_std_pct'],
+        getRows: rowsRmHealthPct,
       },
       {
-        id: 'logistics_cost',
-        name: 'Logistics cost % sales',
-        filename: 'template_logistics_cost_pct_sales.csv',
-        headers: ['month', 'plant_code', 'freight', 'warehousing', 'premium_freight', 'customs_port', 'net_sales', 'cost_pct_sales'],
-        example: ['2026-02', 'ALL', '2.35', '1.25', '0.95', '0.5', '100000', '4.6'],
+        id: 'excess_deficit',
+        name: 'Prioritized excess & deficit (material · sloc / plant)',
+        filename: 'itc_template_inventory_excess_deficit.csv',
+        headers: ['material_key', 'plant_code', 'excess_qty', 'deficit_qty', 'uom'],
+        getRows: rowsExcessDeficit,
       },
     ],
   },
   {
-    tab: 'Inventory & supplier',
+    tab: 'Supplier',
     items: [
       {
-        id: 'inventory_supplier_otif',
-        name: 'Supplier OTIF receipts',
-        filename: 'template_inventory_supplier_otif.csv',
-        headers: ['supplier_id', 'material_family', 'plant_code', 'month', 'otif_pct', 'date_adherence', 'qty_adherence'],
-        example: ['SUP-01', 'Meat meal', 'SS', '2026-02', '88.5', '90', '87'],
+        id: 'supplier_otif',
+        name: 'Supplier OTIF & in-full (by supplier / month)',
+        filename: 'itc_template_supplier_otif.csv',
+        headers: ['supplier_id', 'material_family', 'plant_code', 'month', 'otif_pct', 'in_full_pct'],
+        getRows: rowsSupplierOtif,
       },
       {
-        id: 'inventory_dio_slob',
-        name: 'RM DIO & aging / SLOB',
-        filename: 'template_inventory_dio_slob.csv',
-        headers: ['plant_code', 'material_family', 'month', 'rm_dio_days', 'slob_pct', 'age_bucket', 'inventory_value'],
-        example: ['SK', 'Packaging RM', '2026-02', '42', '8', '61-90d', '125000'],
+        id: 'open_po',
+        name: 'Open purchase orders (risk stack by month)',
+        filename: 'itc_template_open_po_risk.csv',
+        headers: ['month', 'on_track', 'at_risk', 'past_due'],
+        getRows: rowsOpenPo,
       },
     ],
   },
   {
-    tab: 'Actions & issue tree',
+    tab: 'OTIF & customer delivery',
     items: [
       {
-        id: 'actions_tracker',
-        name: 'Actions (upsert by action_id)',
-        filename: 'template_actions_tracker.csv',
+        id: 'customer_otif',
+        name: 'Customer OTIF (monthly trend + schedule proxies)',
+        filename: 'itc_template_customer_otif.csv',
+        headers: ['month', 'otif_pct', 'on_time_pct', 'in_full_pct'],
+        getRows: rowsCustomerOtif,
+      },
+      {
+        id: 'otif_rca',
+        name: 'OTIF RCA by plant (driver families, % of misses)',
+        filename: 'itc_template_otif_rca_plant.csv',
+        headers: ['plant', 'vessel', 'customer', 'material', 'prod_qa', 'wh', 'external'],
+        getRows: rowsOtifRcaPlant,
+      },
+    ],
+  },
+  {
+    tab: 'Expectations, actions & issue tree',
+    items: [
+      {
+        id: 'expectations',
+        name: 'Expectations & actions (by expectation_id)',
+        filename: 'itc_template_expectations_actions.csv',
+        headers: ['expectation_id', 'topic', 'target', 'current', 'rag', 'owner', 'due', 'action'],
+        getRows: rowsExpectations,
+      },
+      {
+        id: 'actions_sop',
+        name: 'S&OP / forum actions (upsert by action_id)',
+        filename: 'itc_template_sop_actions.csv',
         headers: ['action_id', 'issue', 'owner', 'due', 'status', 'severity', 'forum'],
-        example: ['ACT-001', 'Export lane congestion — EU west', 'Logistics', '2026-03-01', 'Open', 'High', 'Pre-S&OP'],
+        getRows: rowsSopActions,
       },
       {
         id: 'issue_tree_reasons',
-        name: 'Client reason codes & RCA mapping',
-        filename: 'template_issue_tree_client_reasons.csv',
-        headers: ['client_code', 'client_reason_text', 'parent_code', 'level', 'path_id', 'executive_family', 'weight_pct', 'maps_to_root_label'],
-        example: ['VSL-14', 'Vessel rolled / slot lost', 'ROOT', '1', 'path-1', 'vessel_export', '12', 'Order Execution Issue'],
+        name: 'OTIF client reason codes & RCA mapping',
+        filename: 'itc_template_issue_tree_reasons.csv',
+        headers: [
+          'client_code',
+          'client_reason_text',
+          'parent_code',
+          'level',
+          'path_id',
+          'executive_family',
+          'weight_pct',
+          'maps_to_root_label',
+        ],
+        getRows: rowsIssueTreeReasons,
       },
     ],
   },
 ];
 
-export function buildTemplateCsv(headers, exampleRow) {
-  const h = headers.join(',');
-  const e = exampleRow.map((c) => (String(c).includes(',') ? `"${String(c).replace(/"/g, '""')}"` : c)).join(',');
-  return `${BOM}${h}\n${e}\n`;
-}
-
 export function downloadMetricTemplate(item) {
-  const content = buildTemplateCsv(item.headers, item.example);
+  if (!item.getRows) throw new Error('Template must define getRows()');
+  const content = buildTemplateCsvString(item.headers, item.getRows());
   download(item.filename, content);
 }
 
-export function downloadAllTemplatesZip() {
-  METRIC_TEMPLATE_GROUPS.forEach((g) => {
+export function downloadAllItcTemplates() {
+  ITC_METRIC_TEMPLATE_GROUPS.forEach((g) => {
     g.items.forEach((item) => downloadMetricTemplate(item));
   });
 }
+
+export const METRIC_TEMPLATE_GROUPS = ITC_METRIC_TEMPLATE_GROUPS;
+export const downloadAllTemplatesZip = downloadAllItcTemplates;
